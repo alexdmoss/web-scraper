@@ -33,5 +33,12 @@ There is a wrapper script (`./go` in `bash`) to make this easier (**Note:** CI d
 - `./go run`- run go locally without building
 - `./go test` - run unit tests and benchmarks
 - `./go build` - builds docker image locally and runs smoke tests
+- `./go watch-tests` - to run pytest continously in the CLI - helpful when developing
 
-NB: You can use `pipenv run ptw` to continuously run your tests in the background - quite helpful!
+---
+
+## Enabling in GCP
+
+```sh
+gcloud services enable run.googleapis.com
+```
