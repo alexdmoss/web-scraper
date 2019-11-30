@@ -33,11 +33,11 @@ def scrape():
     if data and word_to_find:
         logger.info(f"Word to search for set to {word_to_find}")
         if find_word_in_source(data, word_to_find):
-            logger.info("[SUCCESS] Word matched on web page")
-            return "[SUCCESS] Word matched on web page"
+            logger.info(f"[SUCCESS] Word {word_to_find} matched on web page {url}")
+            return f"[SUCCESS] Word {word_to_find} matched on web page {url}"
         else:
-            logger.info("[FAILED] Word is not present on web page")
-            return "[FAILED] Word is not present on web page"
+            logger.info(f"[NO MATCH] Word {word_to_find} is not present on web page {url}")
+            return f"[NO MATCH] Word {word_to_find} is not present on web page {url}"
     else:
         logger.error("Word to search for not specified")
         return "[ERROR] Word to search for not specified"

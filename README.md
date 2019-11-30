@@ -15,10 +15,16 @@ Goals:
 - [x] Bootstrap project
 - [x] Init BeautifulSoup
 - [x] Search for word on cinema booking page!
-- [ ] Run in Cloud Run
+- [x] Run in Cloud Run
 - [ ] Wire up a Schedule
 - [ ] Generate Log-Based Metric
 - [ ] Create Alert in Stackdriver
+
+## Extensions
+
+- [ ] Make the word match case-insensitive
+- [ ] Make the word match only for words in the body
+- [ ] Allow a list of words to search for
 
 ---
 
@@ -40,7 +46,13 @@ There is a wrapper script (`./go` in `bash`) to make this easier (**Note:** CI d
 ## Getting It Running in Google Cloud Run
 
 1. Enable the API in your GCP project with `gcloud services enable run.googleapis.com`
+2. Come up with a `gcloud run deploy` command - see the deploy function in `./go` for what this ended up being!
 
 ### Hacks
 
 - I set the PORT in the Dockerfile to 8080, which is the Cloud Run default. Solutions proposed by Google involved hacking about with my Dockerfile, which I wasn't wild about - I don't think `$PORT` should be a mandatory env variable
+
+### Further Experiments
+
+- give it a nicer hostname
+- remove the unauthenticated, in case someone finds it and spams it!

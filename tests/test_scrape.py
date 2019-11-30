@@ -55,8 +55,8 @@ def test_for_failed_match(monkeypatch, mocker, caplog):
         rv = app.dispatch_request()
         response = app.make_response(rv)
         assert response.status_code == 200
-        assert "[FAILED]" in response.get_data(as_text=True)
-        assert "[FAILED]" in caplog.text
+        assert "[NO MATCH]" in response.get_data(as_text=True)
+        assert "[NO MATCH]" in caplog.text
 
 
 def test_for_missing_url(monkeypatch, mocker, caplog):
