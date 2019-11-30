@@ -1,5 +1,4 @@
 import main
-import pytest
 import logging
 from bs4 import BeautifulSoup
 
@@ -41,19 +40,37 @@ def test_init(mocker):
     assert main.sys.exit.call_args[0][0] == 42
 
 
-def test_main_for_successful_match(mocker, caplog):
+def test_for_successful_match(monkeypatch, mocker, caplog):
     caplog.set_level(logging.INFO)
+    monkeypatch.setenv("TARGET_URL", "http://fake-url.com")
+    monkeypatch.setenv("WORD_TO_FIND", "book")
     stub_html = mocker.patch('main.load_url_as_soup')
     stub_html.return_value = BeautifulSoup(open("tests/mocks/test_data_successful_match.html"), "html.parser")
     main.main()
-    print(caplog.text)
     assert "[SUCCESS]" in caplog.text
 
 
-def test_main_for_failed_match(mocker, caplog):
+def test_for_failed_match(monkeypatch, mocker, caplog):
     caplog.set_level(logging.INFO)
+    monkeypatch.setenv("TARGET_URL", "http://fake-url.com")
+    monkeypatch.setenv("WORD_TO_FIND", "book")
     stub_html = mocker.patch('main.load_url_as_soup')
     stub_html.return_value = BeautifulSoup(open("tests/mocks/test_data_failed_match.html"), "html.parser")
     main.main()
-    print(caplog.text)
     assert "[FAILED]" in caplog.text
+
+
+def test_for_missing_url(monkeypatch, mocker, caplog):
+    caplog.set_level(logging.INFO)
+    monkeypatch.setenv("WORD_TO_FIND", "book")
+    main.main()
+    assert "URL not specified" in caplog.text
+
+
+def test_for_missing_word_to_find(monkeypatch, mocker, caplog):
+    caplog.set_level(logging.INFO)
+    monkeypatch.setenv("TARGET_URL", "http://fake-url.com")
+    stub_html = mocker.patch('main.load_url_as_soup')
+    stub_html.return_value = BeautifulSoup(open("tests/mocks/test_data_failed_match.html"), "html.parser")
+    main.main()
+    assert "Word to search for not specified" in caplog.text

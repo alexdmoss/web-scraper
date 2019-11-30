@@ -2,8 +2,10 @@
 
 import logging
 import sys
-from urllib.request import urlopen
 import ssl
+
+from os import getenv
+from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
 
@@ -18,25 +20,32 @@ def main():
 
     logger.info('web-scraper has started')
 
-    # TODO: load from config
-    url = 'https://www.olympiccinema.co.uk/film/Star-Wars:-Rise-Of-Skywalker'
-    word_to_find = 'book'
+    data = None
+    url = getenv("TARGET_URL")
+    word_to_find = getenv("WORD_TO_FIND")
 
-    data = load_url_as_soup(url)
-
-    title = get_title(data)
-    logger.info(f'Title of Page is: {title}')
-
-    if find_word_in_source(data, word_to_find):
-        logger.info('[SUCCESS] Word matched on web page')
+    if url:
+        logger.info(f"URL to scrape set to {url}")
+        data = load_url_as_soup(url)
+        title = get_title(data)
+        logger.info(f'Title of Page is: {title}')
     else:
-        logger.info('[FAILED] Word is not present on web page')
+        logger.error('URL not specified')
+
+    if data and word_to_find:
+        logger.info(f"Word to search for set to {word_to_find}")
+        if find_word_in_source(data, word_to_find):
+            logger.info('[SUCCESS] Word matched on web page')
+        else:
+            logger.info('[FAILED] Word is not present on web page')
+    else:
+        logger.error('Word to search for not specified')
 
     logger.info('web-scraper has completed')
 
 
 def load_url_as_soup(url):
-    source = urlopen(url, context=ssl._create_unverified_context()).read()
+    source = urlopen(url, timeout=10, context=ssl._create_unverified_context()).read()
     return BeautifulSoup(source, 'html.parser')
 
 
