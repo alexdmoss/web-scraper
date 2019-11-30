@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ -z ${IMAGE_NAME:-} ]]; then
-  IMAGE_NAME=python-bootstrap
-fi 
-
-# set to N if you want linting failures to stop ./go test
-ignore_linting_failures=Y
 
 function help() {
   echo -e "Usage: go <command>"
@@ -45,7 +39,7 @@ function test() {
 
     _console_msg "Running flake8 ..." INFO true
 
-    pipenv run flake8 main.py
+    pipenv run flake8 .
 
     _console_msg "Running unit tests ..." INFO true
 
@@ -66,6 +60,8 @@ function watch-tests() {
 }
 
 function build() {
+
+  _assert_variables_set IMAGE_NAME
 
   _console_msg "Building python docker image ..." INFO true
 
