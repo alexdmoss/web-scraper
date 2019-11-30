@@ -27,9 +27,11 @@ function init() {
 
 function run() {
 
-  _console_msg "Running python:main ..." INFO true
+  _console_msg "Running app ..." INFO true
 
-  pipenv run python3 main.py
+  export FLASK_APP=webscraper
+  export FLASK_DEBUG=1
+  pipenv run flask run
 
   _console_msg "Execution complete" INFO true
 

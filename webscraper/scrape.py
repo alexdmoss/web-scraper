@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
-
 import logging
-import sys
 import ssl
+
+from webscraper import app
 
 from os import getenv
 from urllib.request import urlopen
@@ -16,10 +15,8 @@ logging.basicConfig(level=logging.INFO,
 logger = logging.getLogger(__name__)
 
 
-def main():
-
-    logger.info('web-scraper has started')
-
+@app.route("/", methods=["GET"])
+def scrape():
     data = None
     url = getenv("TARGET_URL")
     word_to_find = getenv("WORD_TO_FIND")
@@ -28,25 +25,27 @@ def main():
         logger.info(f"URL to scrape set to {url}")
         data = load_url_as_soup(url)
         title = get_title(data)
-        logger.info(f'Title of Page is: {title}')
+        logger.info(f"Page Title: {title}")
     else:
-        logger.error('URL not specified')
+        logger.error("URL not specified")
+        return "[ERROR] URL not specified"
 
     if data and word_to_find:
         logger.info(f"Word to search for set to {word_to_find}")
         if find_word_in_source(data, word_to_find):
-            logger.info('[SUCCESS] Word matched on web page')
+            logger.info("[SUCCESS] Word matched on web page")
+            return "[SUCCESS] Word matched on web page"
         else:
-            logger.info('[FAILED] Word is not present on web page')
+            logger.info("[FAILED] Word is not present on web page")
+            return "[FAILED] Word is not present on web page"
     else:
-        logger.error('Word to search for not specified')
-
-    logger.info('web-scraper has completed')
+        logger.error("Word to search for not specified")
+        return "[ERROR] Word to search for not specified"
 
 
 def load_url_as_soup(url):
     source = urlopen(url, timeout=10, context=ssl._create_unverified_context()).read()
-    return BeautifulSoup(source, 'html.parser')
+    return BeautifulSoup(source, "html.parser")
 
 
 def get_title(data):
@@ -61,9 +60,5 @@ def find_word_in_source(data, word):
         return False
 
 
-def init():
-    if __name__ == "__main__":
-        sys.exit(main())
-
-
-init()
+# if __name__ == "__main__":
+#     app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
