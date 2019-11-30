@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+SERVICE_NAME=webscraper
 
 function help() {
   echo -e "Usage: go <command>"
@@ -75,7 +76,7 @@ function build() {
 
 function deploy() {
 
-  _assert_variables_set GCP_PROJECT_ID
+  _assert_variables_set GCP_PROJECT_ID SERVICE_NAME
 
   _console_msg "Deploying to Google Cloud Run ..." INFO true
 
@@ -92,7 +93,7 @@ function deploy() {
     LATEST_TAG=${DRONE_COMMIT_SHA}
   fi
 
-  gcloud run deploy webscraper \
+  gcloud run deploy ${SERVICE_NAME} \
     --image=eu.gcr.io/moss-work/web-scraper:${LATEST_TAG} \
     --platform=managed \
     --region=europe-west1 \
@@ -105,6 +106,32 @@ function deploy() {
     --update-env-vars TARGET_URL="https://www.olympiccinema.co.uk/film/Star-Wars:-Rise-Of-Skywalker",WORD_TO_FIND="book"
 
   _console_msg "Deploy complete" INFO true
+
+}
+
+function configure-schedule() {
+
+  _assert_variables_set GCP_PROJECT_ID SERVICE_NAME SERVICE_URL
+
+  _console_msg "Setting permissions for Cloud Run access" INFO true
+
+  gcloud run services add-iam-policy-binding ${SERVICE_NAME} \
+    --member=serviceAccount:web-scraper-runner@${GCP_PROJECT_ID}.iam.gserviceaccount.com \
+    --role=roles/run.invoker \
+    --project=${GCP_PROJECT_ID} \
+    --region=europe-west1 \
+    --platform=managed
+
+  _console_msg "Configuring Cloud Scheduler job" INFO true
+
+  gcloud beta scheduler jobs create http ${SERVICE_NAME}-job \
+    --schedule "5 * * * *" \
+    --http-method=GET \
+    --uri=${SERVICE_URL} \
+    --oidc-service-account-email=web-scraper-runner@${GCP_PROJECT_ID}.iam.gserviceaccount.com   \
+    --oidc-token-audience=${SERVICE_URL}
+
+    _console_msg "Schedule setup complete" INFO true
 
 }
 
@@ -157,7 +184,7 @@ function ctrl_c() {
 
 trap ctrl_c INT
 
-if [[ ${1:-} =~ ^(help|run|build|test|init|watch-tests|deploy)$ ]]; then
+if [[ ${1:-} =~ ^(help|run|build|test|init|watch-tests|deploy|configure-schedule)$ ]]; then
   COMMAND=${1}
   shift
   $COMMAND "$@"

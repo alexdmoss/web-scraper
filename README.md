@@ -16,15 +16,21 @@ Goals:
 - [x] Init BeautifulSoup
 - [x] Search for word on cinema booking page!
 - [x] Run in Cloud Run
-- [ ] Wire up a Schedule
-- [ ] Generate Log-Based Metric
-- [ ] Create Alert in Stackdriver
+- [x] Convert to authenticated access only
+- [x] Wire up a Schedule
+- [x] Generate Log-Based Metric
+- [x] Create Alert in Stackdriver
+- [x] Check receive alert
+- [ ] Convert metric & alert to Success
+- [ ] Check how much it costs to run!
+- [ ] Blog post on this stuff perhaps?
 
 ## Extensions
 
 - [ ] Make the word match case-insensitive
 - [ ] Make the word match only for words in the body
 - [ ] Allow a list of words to search for
+- [ ] Can you set up the log metric & stackdriver alert via an API?
 
 ---
 
@@ -47,6 +53,8 @@ There is a wrapper script (`./go` in `bash`) to make this easier (**Note:** CI d
 
 1. Enable the API in your GCP project with `gcloud services enable run.googleapis.com`
 2. Come up with a `gcloud run deploy` command - see the deploy function in `./go` for what this ended up being!
+3. When switching to CI, the Service Account needs the **Cloud Run Admin** and **Service Account User** roles to successfully use `gcloud run deploy`
+4. When authentication is turned on, this command can allow you to grant yourself access to the API: `gcloud run services add-iam-policy-binding ${SERVICE_NAME} --member='user:<your-gcp-email-address>' --role='roles/run.invoker'`
 
 ### Hacks
 
@@ -54,6 +62,5 @@ There is a wrapper script (`./go` in `bash`) to make this easier (**Note:** CI d
 
 ### Further Experiments
 
-- Try out Cloud Build to auto-deploy to it
-- Give it a nicer hostname
-- Remove the unauthenticated, in case someone finds it and spams it!
+- [ ] Try out Cloud Build to auto-deploy to it
+- [ ] Give it a nicer hostname
