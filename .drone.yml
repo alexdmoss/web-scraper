@@ -14,3 +14,13 @@ steps:
     when:
       event: push
       branch: master
+  - name: deploy
+    image: mosstech/drone-gke-deployer:latest
+    environment:
+      GCP_PROJECT_ID:
+        from_secret: MW_PROJECT
+    commands:
+      - ./go deploy
+    when:
+      event: push
+      branch: master

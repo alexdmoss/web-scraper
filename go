@@ -75,21 +75,26 @@ function build() {
 
 function deploy() {
 
+  _assert_variables_set GCP_PROJECT_ID
+
   _console_msg "Deploying to Google Cloud Run ..." INFO true
 
-  if [[ -z ${DRONE_COMMIT_SHA} ]]; then
+  if [[ -z ${DRONE_COMMIT_SHA:-} ]]; then
     LATEST_TAG=$(gcloud container images list-tags eu.gcr.io/moss-work/web-scraper --limit=1 --format='value(tags)')
   else
     LATEST_TAG=${DRONE_COMMIT_SHA}
   fi
-  
-  gcloud run deploy webscraper --image=eu.gcr.io/moss-work/web-scraper:${LATEST_TAG} --platform=managed --region=europe-west1 \
-    --timeout=10
-    --concurrency=1
-    --max-instances=1
+
+  gcloud run deploy webscraper \
+    --image=eu.gcr.io/moss-work/web-scraper:${LATEST_TAG} \
+    --platform=managed \
+    --region=europe-west1 \
+    --project=${GCP_PROJECT_ID} \
+    --timeout=10 \
+    --concurrency=1 \
+    --max-instances=1 \
     --allow-unauthenticated \
-    --update-env-vars TARGET_URL="https://www.olympiccinema.co.uk/film/Star-Wars:-Rise-Of-Skywalker",WORD_TO_FIND="book" \
-    --quiet
+    --update-env-vars TARGET_URL="https://www.olympiccinema.co.uk/film/Star-Wars:-Rise-Of-Skywalker",WORD_TO_FIND="book"
 
   _console_msg "Deploy complete" INFO true
 
