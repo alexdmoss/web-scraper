@@ -37,8 +37,10 @@ There is a wrapper script (`./go` in `bash`) to make this easier (**Note:** CI d
 
 ---
 
-## Enabling in GCP
+## Getting It Running in Google Cloud Run
 
-```sh
-gcloud services enable run.googleapis.com
-```
+1. Enable the API in your GCP project with `gcloud services enable run.googleapis.com`
+
+### Hacks
+
+- I set the PORT in the Dockerfile to 8080, which is the Cloud Run default. Solutions proposed by Google involved hacking about with my Dockerfile, which I wasn't wild about - I don't think `$PORT` should be a mandatory env variable

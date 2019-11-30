@@ -36,6 +36,5 @@ RUN addgroup --gid "$GID" "$USER" \
   && chown $USER /app
 USER web-app
 WORKDIR /app
-EXPOSE 5000
 ENV FLASK_APP=webscraper
-ENTRYPOINT ["gunicorn", "-t", "8", "-w", "1", "--bind", "0.0.0.0:5000", "webscraper:app"]
+CMD ["gunicorn", "-t", "8", "-w", "1", "--bind", ":8080", "webscraper:app"]
