@@ -73,6 +73,16 @@ function build() {
 
 }
 
+function deploy() {
+
+  _console_msg "Deploying to Google Cloud Run ..." INFO true
+
+  gcloud run deploy webscraper --image=eu.gcr.io/moss-work/web-scraper:bdb42d3f5b76dccde7103508a91e4a60bd235415 --platform=managed --region=europe-west1 --timeout=10 --concurrency=1 --max-instances=1 --allow-unauthenticated --update-env-vars TARGET_URL="https://www.olympiccinema.co.uk/film/Star-Wars:-Rise-Of-Skywalker",WORD_TO_FIND="book" --quiet
+
+  _console_msg "Deploy complete" INFO true
+
+}
+
 function _assert_variables_set() {
 
   local error=0
@@ -122,7 +132,7 @@ function ctrl_c() {
 
 trap ctrl_c INT
 
-if [[ ${1:-} =~ ^(help|run|build|test|init|watch-tests)$ ]]; then
+if [[ ${1:-} =~ ^(help|run|build|test|init|watch-tests|deploy)$ ]]; then
   COMMAND=${1}
   shift
   $COMMAND "$@"

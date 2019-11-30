@@ -1,6 +1,6 @@
 ---
 kind: pipeline
-name: right-sizer
+name: web-scraper
 
 steps:
   - name: publish
