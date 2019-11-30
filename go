@@ -83,7 +83,7 @@ function deploy() {
     _assert_variables_set CLOUD_RUN_CREDS
     _console_msg "-> Authenticating with GCloud"
     echo "${CLOUD_RUN_CREDS}" | gcloud auth activate-service-account --key-file -
-    trap "gcloud auth revoke --verbosity=ERROR" EXIT
+    trap "gcloud auth revoke --verbosity=error" EXIT
   fi
 
   if [[ -z ${DRONE_COMMIT_SHA:-} ]]; then
@@ -101,7 +101,6 @@ function deploy() {
     --concurrency=1 \
     --max-instances=1 \
     --memory=128Mi \
-    --cpu=200m \
     --no-allow-unauthenticated \
     --update-env-vars TARGET_URL="https://www.olympiccinema.co.uk/film/Star-Wars:-Rise-Of-Skywalker",WORD_TO_FIND="book"
 
