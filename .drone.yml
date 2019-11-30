@@ -1,0 +1,16 @@
+---
+kind: pipeline
+name: right-sizer
+
+steps:
+  - name: publish
+    image: plugins/gcr
+    settings:
+      registry: eu.gcr.io
+      repo: moss-work/web-scraper
+      tags: ${DRONE_COMMIT_SHA}
+      json_key:
+        from_secret: MW_PUSH_CREDS
+    when:
+      event: push
+      branch: master

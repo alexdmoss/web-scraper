@@ -37,5 +37,4 @@ RUN addgroup --gid "$GID" "$USER" \
 USER web-app
 WORKDIR /app
 ENV FLASK_APP=webscraper
-# ENTRYPOINT [ "pipenv", "run", "flask", "run", "--host=0.0.0.0"]
-ENTRYPOINT ["gunicorn", "-t", "200", "-w", "2", "--bind", "0.0.0.0:5000", "webscraper:app"]
+ENTRYPOINT ["gunicorn", "-t", "8", "-w", "1", "--bind", "0.0.0.0:5000", "webscraper:app"]
