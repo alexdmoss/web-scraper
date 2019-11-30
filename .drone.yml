@@ -19,6 +19,8 @@ steps:
     environment:
       GCP_PROJECT_ID:
         from_secret: MW_PROJECT
+      CLOUD_RUN_CREDS:
+        from_secret: MW_CLOUD_RUN_CREDS
     commands:
       - ./go deploy
     when:

@@ -79,6 +79,13 @@ function deploy() {
 
   _console_msg "Deploying to Google Cloud Run ..." INFO true
 
+  if [[ ${DRONE:-} == "true" ]]; then
+    _assert_variables_set CLOUD_RUN_CREDS
+    _console_msg "-> Authenticating with GCloud"
+    echo "${CLOUD_RUN_CREDS}" | gcloud auth activate-service-account --key-file -
+    trap "gcloud auth revoke --verbosity=ERROR" EXIT
+  fi
+
   if [[ -z ${DRONE_COMMIT_SHA:-} ]]; then
     LATEST_TAG=$(gcloud container images list-tags eu.gcr.io/moss-work/web-scraper --limit=1 --format='value(tags)')
   else
@@ -93,6 +100,8 @@ function deploy() {
     --timeout=10 \
     --concurrency=1 \
     --max-instances=1 \
+    --memory=128Mi \
+    --cpu=200m \
     --no-allow-unauthenticated \
     --update-env-vars TARGET_URL="https://www.olympiccinema.co.uk/film/Star-Wars:-Rise-Of-Skywalker",WORD_TO_FIND="book"
 
