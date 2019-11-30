@@ -54,5 +54,6 @@ There is a wrapper script (`./go` in `bash`) to make this easier (**Note:** CI d
 
 ### Further Experiments
 
-- give it a nicer hostname
-- remove the unauthenticated, in case someone finds it and spams it!
+- Try out Cloud Build to auto-deploy to it
+- Give it a nicer hostname
+- Remove the unauthenticated, in case someone finds it and spams it!

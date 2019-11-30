@@ -93,7 +93,7 @@ function deploy() {
     --timeout=10 \
     --concurrency=1 \
     --max-instances=1 \
-    --allow-unauthenticated \
+    --no-allow-unauthenticated \
     --update-env-vars TARGET_URL="https://www.olympiccinema.co.uk/film/Star-Wars:-Rise-Of-Skywalker",WORD_TO_FIND="book"
 
   _console_msg "Deploy complete" INFO true
