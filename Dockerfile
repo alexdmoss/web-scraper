@@ -29,5 +29,4 @@ FROM python:$BASE_IMAGE
 COPY --from=runtime-pips /app /app
 COPY --from=runtime-pips /usr/local /usr/local
 WORKDIR /app
-EXPOSE 8000
 ENTRYPOINT ["/usr/local/bin/python", "/app/main.py"]
