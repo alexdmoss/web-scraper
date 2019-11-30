@@ -49,7 +49,7 @@ function test() {
 
     _console_msg "Running unit tests ..." INFO true
 
-    pipenv run pytest --disable-pytest-warnings --junit-xml junit-report.xml  
+    pipenv run pytest -v
 
     _console_msg "Tests complete" INFO true
 

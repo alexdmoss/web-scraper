@@ -20,7 +20,7 @@ def main():
 
     # TODO: load from config
     url = 'https://www.olympiccinema.co.uk/film/Star-Wars:-Rise-Of-Skywalker'
-    word_to_find = 'select'
+    word_to_find = 'book'
 
     data = load_url_as_soup(url)
 
@@ -28,9 +28,9 @@ def main():
     logger.info(f'Title of Page is: {title}')
 
     if find_word_in_source(data, word_to_find):
-        logger.info('Success! Word matched on web page')
+        logger.info('[SUCCESS] Word matched on web page')
     else:
-        logger.info('Failed! Word is not present on web page')
+        logger.info('[FAILED] Word is not present on web page')
 
     logger.info('web-scraper has completed')
 

@@ -4,8 +4,9 @@ Goals:
 
 1. Practice TDD
 2. Scrape a web page using Python's Beautiful Soup
-3. Set up as a Google Cloud Function on a schedule
-4. Write a log-based metric which Stackdriver can have an alert for (because there's no SMTP service in GCP!)
+3. Run in Cloud Run
+4. Set up a Schedule
+5. Write a log-based metric which Stackdriver can have an alert for (because there's no SMTP service in GCP!)
 
 ---
 
@@ -14,7 +15,7 @@ Goals:
 - [x] Bootstrap project
 - [x] Init BeautifulSoup
 - [x] Search for word on cinema booking page!
-- [ ] Run as Cloud Function
+- [ ] Run in Cloud Run
 - [ ] Wire up a Schedule
 - [ ] Generate Log-Based Metric
 - [ ] Create Alert in Stackdriver
