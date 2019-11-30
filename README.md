@@ -11,8 +11,9 @@ Goals:
 
 ## To Do
 
-- [ ] Bootstrap project
-- [ ] Init BeautifulSoup
+- [x] Bootstrap project
+- [x] Init BeautifulSoup
+- [x] Search for word on cinema booking page!
 - [ ] Run as Cloud Function
 - [ ] Wire up a Schedule
 - [ ] Generate Log-Based Metric
@@ -33,15 +34,3 @@ There is a wrapper script (`./go` in `bash`) to make this easier (**Note:** CI d
 - `./go build` - builds docker image locally and runs smoke tests
 
 NB: You can use `pipenv run ptw` to continuously run your tests in the background - quite helpful!
-
-## Replicating
-
-**Repo name** is included in the following locations:
-
-- `setup.py`
-- top of `./go`
-- `.coveragerc`
-
-**Package names** are included in:
-
-- `Pipfile`
