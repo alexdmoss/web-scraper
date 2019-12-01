@@ -124,8 +124,9 @@ function configure-schedule() {
 
   _console_msg "Configuring Cloud Scheduler job" INFO true
 
+  gcloud beta scheduler jobs delete ${SERVICE_NAME}-job --quiet || true
   gcloud beta scheduler jobs create http ${SERVICE_NAME}-job \
-    --schedule "5 * * * *" \
+    --schedule "*/5 * * * *" \
     --http-method=GET \
     --uri=${SERVICE_URL} \
     --oidc-service-account-email=web-scraper-runner@${GCP_PROJECT_ID}.iam.gserviceaccount.com   \
